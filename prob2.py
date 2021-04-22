@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-#                             -*- Mode: Python -*- 
-#  Last Modified On: Thu Apr 22 15:35:00 2021
-# 
+# -*- Mode: Python -*- 
 
 import sys, platform
 import logging
@@ -76,6 +74,16 @@ class order:
       self.productType = productType
 
    #########################################################################
+   def validate(self): 
+   #########################################################################
+      s = "valid"
+      if   self.productType in physicalProducts and self.title == None:
+         s = "%s needs a title" % self.productType
+      if   self.productType in virtualProducts and self.action == None:
+         s = "%s needs an action" % self.productType
+      return s
+
+   #########################################################################
    def __str__(self):
    #########################################################################
       s  = "Type: %s, " % self.productType
@@ -83,6 +91,7 @@ class order:
          s += "Title: %s, " % self.title
       if self.action is not None:
          s += "Action: %s, " % self.action
+      s += "Status: %s" % self.validate()
       return s
 
 ############################################################################
