@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- Mode: Python -*- 
 
 import sys, platform
@@ -93,6 +93,7 @@ class order:
    #########################################################################
       # In "real" life this should call other systems instead of printing
       # probably using other classes (member, packingSlip, ...)
+      log.debug("productType: %s" % self.productType)
       if self.productType in physicalProducts: 
          print("Generate a commission payment to the agent")
          print("Instantiate packing slip for shipping")
@@ -147,7 +148,6 @@ def main():              # Start the show
       test()
       sys.exit(0)
 
-   #log.set_threshold(5 - cfgVal.verbosity )
    for l in [ "debug", "info", "warning", "error", "critical" ]:
       (getattr(log,l))( "Log Level %s" % l)
 
