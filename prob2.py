@@ -41,6 +41,11 @@ def parseArgs():        # Parse the input
       choices=[ "new", "upgrade" ],
       help="If membership, specify if new member or an upgrade")
 
+   parser.add_argument("-u", "--unit",
+      action="store_true",
+      default=False,
+      help="A (very small) bit of unit test")
+
    parser.add_argument("-v", "--verbosity",
       action="count",
       default=0,
@@ -95,6 +100,18 @@ class order:
       return s
 
 ############################################################################
+def test():
+############################################################################
+   print("Testing")
+   o1 = order( log, productType = "book", title = "Bla bla" )
+   assert "valid" == o1.validate()
+
+   o2 = order( log, productType = "book", action = "Bla bla" )
+   assert "valid" != o2.validate()
+
+   print("Done testing")
+
+############################################################################
 def main():              # Start the show
 ############################################################################
    cfgVal = parseArgs()
@@ -105,6 +122,9 @@ def main():              # Start the show
       log.error("Max verbosity level is 5, passing %d v's is silly" % cfgVal.verbosity  )
 
    log.debug("verbosity  = %d (=> %s)" % (cfgVal.verbosity, logging.getLevelName(log.level)))
+   if cfgVal.unit:
+      test()
+      sys.exit(0)
 
    #log.set_threshold(5 - cfgVal.verbosity )
    for l in [ "debug", "info", "warning", "error", "critical" ]:
