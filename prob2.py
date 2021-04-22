@@ -17,13 +17,31 @@ logging.basicConfig(
 global log
 log = logging.getLogger("self")
 
+# A book IS a physical product !
+physicalProducts = [ "book", "video" ]
+virtualProducts = [ "membership" ]
+
 ############################################################################
 def parseArgs():        # Parse the input
 ############################################################################
    parser = argparse.ArgumentParser( 
-      description="Python template",
+      description="Business Rules Engine",
       formatter_class=argparse.RawTextHelpFormatter,
-      epilog="Only use if you know what you're doing (python ver %s)" % platform.python_version() )
+      epilog="Problem 2 (python ver %s)" % platform.python_version() )
+
+   parser.add_argument("-p", "--productType",
+      default="unknown",
+      choices = physicalProducts + virtualProducts,
+      help='Specify the product')
+
+   parser.add_argument("-t", "--title",
+      default = None,
+      help="If book or video, this sets the title")
+
+   parser.add_argument("-a", "--action",
+      default = None,
+      choices=[ "new", "upgrade" ],
+      help="If membership, specify if new member or an upgrade")
 
    parser.add_argument("-v", "--verbosity",
       action="count",
