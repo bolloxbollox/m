@@ -38,8 +38,8 @@ def parseArgs():        # Parse the input
 
    parser.add_argument("-a", "--action",
       default = None,
-      choices=[ "new", "upgrade" ],
-      help="If membership, specify if new member or an upgrade")
+      choices=[ "activation", "upgrade" ],
+      help="If membership, specify if membership activation or an upgrade")
 
    parser.add_argument("-u", "--unit",
       action="store_true",
@@ -89,6 +89,27 @@ class order:
       return s
 
    #########################################################################
+   def handle(self):
+   #########################################################################
+      # In "real" life this should call other systems instead of printing
+      # probably using other classes (member, packingSlip, ...)
+      if self.productType in physicalProducts: 
+         print("Generate a commission payment to the agent")
+         print("Instantiate packing slip for shipping")
+         print("   add %s \"%s\" to packing slip" % ( self.productType, self.title ))
+      if self.productType == "video" and self.title == self.magicTitle : 
+         print("   add video \"First Aid\" to packing slip")
+      if self.productType == "book" : 
+         print("   duplicate the packing slip for the royalty department")
+
+      if self.productType == "membership" : 
+         if self.action == "activation":
+            print("Create new membership and activate it")
+         elif self.action == "upgrade":
+            print("Find the membership in database or similar and upgrade it")
+         print("   e-mail the owner and inform them of the membership %s" % self.action )
+
+   #########################################################################
    def __str__(self):
    #########################################################################
       s  = "Type: %s, " % self.productType
@@ -131,12 +152,15 @@ def main():              # Start the show
       (getattr(log,l))( "Log Level %s" % l)
 
    o = order( log, productType = cfgVal.productType, action = cfgVal.action, title = cfgVal.title )
-   log.info(o)
+   rs = o.validate()
+   if rs != "valid":
+      print("Error: %s" % rs)
+      sys.exit(1)
+   o.handle()
 
 ############################################################################
 
 if __name__ == "__main__":
-   #  parseArgs()
    main()
 
 sys.exit(0)
