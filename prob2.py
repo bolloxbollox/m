@@ -51,8 +51,39 @@ def parseArgs():        # Parse the input
    cfgVal = parser.parse_args()
    return cfgVal
 
+############################################################################
+class order:
+############################################################################
+   action = None
+   productType = None
+   title = None
 
+   magicTitle = "Learning to Ski"
+   productTypes = physicalProducts + virtualProducts
 
+   #########################################################################
+   def __init__(self, log, productType = None, title = None, action = None ):
+   #########################################################################
+      self.log = log
+      if   productType in physicalProducts: 
+         self.title    = title
+      elif productType in virtualProducts:
+         self.action   = action
+      else:
+         print("ERROR: unknown product type %s" % productType  )
+         sys.exit(1)
+
+      self.productType = productType
+
+   #########################################################################
+   def __str__(self):
+   #########################################################################
+      s  = "Type: %s, " % self.productType
+      if self.title is not None:
+         s += "Title: %s, " % self.title
+      if self.action is not None:
+         s += "Action: %s, " % self.action
+      return s
 
 ############################################################################
 def main():              # Start the show
@@ -69,6 +100,9 @@ def main():              # Start the show
    #log.set_threshold(5 - cfgVal.verbosity )
    for l in [ "debug", "info", "warning", "error", "critical" ]:
       (getattr(log,l))( "Log Level %s" % l)
+
+   o = order( log, productType = cfgVal.productType, action = cfgVal.action, title = cfgVal.title )
+   log.info(o)
 
 ############################################################################
 
